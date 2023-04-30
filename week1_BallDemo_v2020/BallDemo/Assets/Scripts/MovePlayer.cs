@@ -43,8 +43,14 @@ public class MovePlayer : MonoBehaviour
         //if ((jump == true) && (WaitTime < 0))
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
-
 		rb.AddForce(movement * speed);
+		Debug.Log(rb.velocity.magnitude);
+		/* if(rb.velocity.magnitude > 0) {
+		 *		speed input = 30 * velocity.magnitude
+		 *		play roll sounds
+		 * 30 * velocity.magnitude
+		 * }
+		 */
 	}
 
 	void OnTriggerEnter(Collider other)
