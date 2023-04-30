@@ -9,8 +9,10 @@ public class MovePlayer : MonoBehaviour
 	public float speed;
 	public Text countText;
 
-	private Rigidbody rb;
+	public Rigidbody rb;
 	private int count;
+
+	//bool jump;
 
 	private float WaitTime = 0;
 	void Start()
@@ -21,19 +23,24 @@ public class MovePlayer : MonoBehaviour
 	}
 
 
+	void Update()
+    {
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			//WaitTime = 1;
+			rb.AddForce(Vector3.up * JumpStrength);
+		}
+	}
+
 	void FixedUpdate()
 	{
 		float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
-		bool jump = Input.GetKeyDown("space");
+        //jump = Input.GetKeyDown("space");
 
-		//countText.text = "(x,y,z): (" + rb.position.x.ToString() + ", " + rb.position.y.ToString() + ", " + rb.position.z.ToString() + ")";
-		WaitTime -= Time.deltaTime;
-		if ((jump == true) && (WaitTime < 0))
-		{
-			WaitTime = 1;
-			rb.AddForce(Vector3.up * JumpStrength);
-		}
+        //countText.text = "(x,y,z): (" + rb.position.x.ToString() + ", " + rb.position.y.ToString() + ", " + rb.position.z.ToString() + ")";
+        //WaitTime -= Time.deltaTime;
+        //if ((jump == true) && (WaitTime < 0))
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 
