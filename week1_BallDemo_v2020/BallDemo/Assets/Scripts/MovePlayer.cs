@@ -44,10 +44,11 @@ public class MovePlayer : MonoBehaviour
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 		rb.AddForce(movement * speed);
-		
-		/* if(rb.velocity.x && rb.velocity.z > 0) {
+		Debug.Log(rb.velocity.magnitude);
+		/* if(rb.velocity.magnitude > 0) {
+		 *		speed input = 30 * velocity.magnitude
 		 *		play roll sounds
-		 * 
+		 * 30 * velocity.magnitude
 		 * }
 		 */
 	}
