@@ -17,6 +17,11 @@ public class MovePlayer : MonoBehaviour
 	private float WaitTime = 0;
 	void Start()
 	{
+		//************* Instantiate the OSC Handler...
+		OSCHandler.Instance.Init();
+		OSCHandler.Instance.SendMessageToClient("pd", "/unity/trigger", "ready");
+		//*************
+
 		rb = GetComponent<Rigidbody>();
 		count = 0;
 		setCountText();
@@ -24,11 +29,12 @@ public class MovePlayer : MonoBehaviour
 
 
 	void Update()
-    {
+	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			//WaitTime = 1;
 			rb.AddForce(Vector3.up * JumpStrength);
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/jump", 1);
 		}
 	}
 
@@ -36,30 +42,34 @@ public class MovePlayer : MonoBehaviour
 	{
 		float moveHorizontal = Input.GetAxis("Horizontal");
 		float moveVertical = Input.GetAxis("Vertical");
-        //jump = Input.GetKeyDown("space");
+		//jump = Input.GetKeyDown("space");
 
-        //countText.text = "(x,y,z): (" + rb.position.x.ToString() + ", " + rb.position.y.ToString() + ", " + rb.position.z.ToString() + ")";
-        //WaitTime -= Time.deltaTime;
-        //if ((jump == true) && (WaitTime < 0))
+		//countText.text = "(x,y,z): (" + rb.position.x.ToString() + ", " + rb.position.y.ToString() + ", " + rb.position.z.ToString() + ")";
+		//WaitTime -= Time.deltaTime;
+		//if ((jump == true) && (WaitTime < 0))
 
 		Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
 		rb.AddForce(movement * speed);
-		Debug.Log(rb.velocity.magnitude);
+		//Debug.Log(rb.velocity.magnitude);
 		/* if(rb.velocity.magnitude > 0) {
 		 *		speed input = 30 * velocity.magnitude
 		 *		play roll sounds
 		 * 30 * velocity.magnitude
 		 * }
 		 */
+		if (rb.velocity.magnitude > 0)
+		{
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/walk", rb.velocity.magnitude);
+		}
+
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.CompareTag("Pick Up"))
+		if (other.gameObject.CompareTag("Wall"))
 		{
-			other.gameObject.SetActive(false);
-			count = count + 1;
-			setCountText();
+			Debug.Log("hit");
+			OSCHandler.Instance.SendMessageToClient("pd", "/unity/colwall", 1);
 		}
 	}
 
